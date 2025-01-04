@@ -29,17 +29,21 @@ bool LED3status = LOW;
 uint8_t LED4pin = D4;
 bool LED4status = LOW;
 
-uint8_t LED5pin = D5;
-bool LED5status = LOW;
+uint8_t OPT1pin = D5;
+bool OPT1status = LOW;
+bool OPT1statuspv = LOW;
 
-uint8_t LED6pin = D6;
-bool LED6status = LOW;
+uint8_t OPT2pin = D6;
+bool OPT2status = LOW;
+bool OPT2statuspv = LOW;
 
-uint8_t LED7pin = D7;
-bool LED7status = LOW;
+uint8_t OPT3pin = D7;
+bool OPT3status = LOW;
+bool OPT3statuspv = LOW;
 
-uint8_t LED8pin = D8;
-bool LED8status = LOW;
+uint8_t OPT4pin = D8;
+bool OPT4status = LOW;
+bool OPT4statuspv = LOW;
 
 void setup() {
   Serial.begin(115200);
@@ -48,10 +52,10 @@ void setup() {
   pinMode(LED2pin, OUTPUT);
   pinMode(LED3pin, OUTPUT);
   pinMode(LED4pin, OUTPUT);
-  pinMode(LED5pin, OUTPUT);
-  pinMode(LED6pin, OUTPUT);
-  pinMode(LED7pin, OUTPUT);
-  pinMode(LED8pin, OUTPUT);
+  pinMode(OPT1pin, INPUT);
+  pinMode(OPT2pin, INPUT);
+  pinMode(OPT3pin, INPUT);
+  pinMode(OPT4pin, INPUT);
 
 
 
@@ -70,14 +74,6 @@ void setup() {
   server.on("/led3off", handle_led3off);
   server.on("/led4on", handle_led4on);
   server.on("/led4off", handle_led4off);
-  server.on("/led5on", handle_led5on);
-  server.on("/led5off", handle_led5off);
-  server.on("/led6on", handle_led6on);
-  server.on("/led6off", handle_led6off);
-  server.on("/led7on", handle_led7on);
-  server.on("/led7off", handle_led7off);
-  server.on("/led8on", handle_led8on);
-  server.on("/led8off",handle_led8off);
   server.onNotFound(handle_NotFound);
   
   server.begin();
@@ -110,223 +106,210 @@ void loop() {
   else
   {digitalWrite(LED4pin, LOW);}
 
-   if(LED5status)
-  {digitalWrite(LED5pin, HIGH);}
-  else
-  {digitalWrite(LED5pin, LOW);}
-
-   if(LED6status)
-  {digitalWrite(LED6pin, HIGH);}
-  else
-  {digitalWrite(LED6pin, LOW);}
-
-   if(LED7status)
-  {digitalWrite(LED7pin, HIGH);}
-  else
-  {digitalWrite(LED7pin, LOW);}
-
-  if(LED8status)
-  {digitalWrite(LED8pin, HIGH);}
-  else
-  {digitalWrite(LED8pin, LOW);}
-
-    if(LED2status)
-  {digitalWrite(LED2pin, HIGH);}
-  else
-  {digitalWrite(LED2pin, LOW);}
+// Inputs
+   OPT1_Handler();
+   OPT2_Handler();
+   OPT3_Handler();
+   OPT4_Handler();
 }
 
 void handle_OnConnect() {
-  LED0status = LOW;
-  LED1status = LOW;
-  LED2status = LOW;
-  LED3status = LOW;
-  LED4status = LOW;
-  LED5status = LOW;
-  LED6status = LOW;
-  LED7status = LOW;
-  LED8status = LOW;
-
-  Serial.println("GPIO7 Status: OFF | GPIO6 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led0on() {
   LED0status = HIGH;
   Serial.println("D0 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led0off() {
   LED0status = LOW;
   Serial.println("D0 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led1on() {
   LED1status = HIGH;
   Serial.println("D1 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led1off() {
   LED1status = LOW;
   Serial.println("D1 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led2on() {
   LED2status = HIGH;
   Serial.println("D2 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led2off() {
   LED2status = LOW;
   Serial.println("D2 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led3on() {
   LED3status = HIGH;
   Serial.println("D3 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led3off() {
   LED3status = LOW;
   Serial.println("D3 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led4on() {
   LED4status = HIGH;
   Serial.println("D4 Status(ON BOARD LED): OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
 void handle_led4off() {
   LED4status = LOW;
   Serial.println("D4 Status(ON BOARD LED): ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
 }
 
-void handle_led5on() {
-  LED5status = HIGH;
-  Serial.println("D5 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+void OPT1_Handler()
+{
+ OPT1status = digitalRead(OPT1pin);
+ if(OPT1status != OPT1statuspv)
+ {
+    OPT1statuspv = OPT1status;
+    Serial.print("OPT1 Status Changed to: ");
+    Serial.print(OPT1status);
+    server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status));
+ }
+ 
 }
 
-void handle_led5off() {
-  LED5status = LOW;
-  Serial.println("D5 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+void OPT2_Handler()
+{
+ OPT2status = digitalRead(OPT2pin);
+ if(OPT2status != OPT2statuspv)
+ {
+    OPT2statuspv = OPT2status;
+    Serial.print("OPT2 Status Changed to: ");
+    Serial.print(OPT2status);
+    server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status));
+ }
 }
 
-void handle_led6on() {
-  LED6status = HIGH;
-  Serial.println("D6 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+void OPT3_Handler()
+{
+ OPT3status = digitalRead(OPT3pin);
+ if(OPT3status != OPT3statuspv)
+ {
+    OPT3statuspv = OPT3status;
+    Serial.print("OPT3 Status Changed to: ");
+    Serial.print(OPT3status);
+    server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status));
+ }
+ 
 }
 
-void handle_led6off() {
-  LED6status = LOW;
-  Serial.println("D6 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
+void OPT4_Handler()
+{
+ OPT4status = digitalRead(OPT4pin);
+ if(OPT4status != OPT4statuspv)
+ {
+    OPT4statuspv = OPT4status;
+    Serial.print("OPT4 Status Changed to: ");
+    Serial.print(OPT4status);
+    server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status));
+ }
+ 
 }
-
-void handle_led7on() {
-  LED7status = HIGH;
-  Serial.println("D7 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
-}
-
-void handle_led7off() {
-  LED7status = LOW;
-  Serial.println("D7 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
-}
-
-void handle_led8on() {
-  LED8status = HIGH;
-  Serial.println("D8 Status: ON");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
-}
-
-void handle_led8off() {
-  LED8status = LOW;
-  Serial.println("D8 Status: OFF");
-  server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,LED5status,LED6status,LED7status,LED8status)); 
-}
-
-
 
 void handle_NotFound(){
   server.send(404, "text/plain", "Not found");
 }
 
-String SendHTML(uint8_t led0stat,uint8_t led1stat,uint8_t led2stat,uint8_t led3stat,uint8_t led4stat,uint8_t led5stat,uint8_t led6stat,uint8_t led7stat,uint8_t led8stat){
+String SendHTML(uint8_t led0stat,uint8_t led1stat,uint8_t led2stat,uint8_t led3stat,uint8_t led4stat,uint8_t opt1stat,uint8_t opt2stat,uint8_t opt3stat,uint8_t opt4stat){
   String ptr = "<!DOCTYPE html> <html>\n";
   ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+  ptr +="<meta http-equiv=\"refresh\" content=\"2\">\n";
   ptr +="<title>LED Control</title>\n";
   ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
   ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
-  ptr +=".button {display: block;width: 80px;background-color: #1abc9c;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
+  ptr +=".button {display: block;width: 50px;background-color: #1abc9c;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 15px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
   ptr +=".button-on {background-color: #1abc9c;}\n";
   ptr +=".button-on:active {background-color: #16a085;}\n";
   ptr +=".button-off {background-color: #34495e;}\n";
   ptr +=".button-off:active {background-color: #2c3e50;}\n";
-  ptr +="p {font-size: 14px;color: #888;margin-bottom: 10px;}\n";
+  ptr +=".rectangle { width: 100px;height:50px;background-color: #00FF00;color: #FFFFFF ;display: flex; justify-content: center; align-items: center; font-size: 15px; border: 2px solid #040404;}\n";
+  ptr +=".rectangle-on { background-color: #00FF00;}\n";
+  ptr +=".rectangle-off {  background-color: #adb0a6; }\n";
+  ptr +=".placeside {display:flex;}\n";
+  ptr +="p {font-size: 15px;color: #888;margin-bottom: 10px;}\n";
   ptr +="</style>\n";
   ptr +="</head>\n";
   ptr +="<body>\n";
   ptr +="<h1>LED CONTROL</h1>\n";
   ptr +="<h3>Designed by Subhanjit</h3>\n";
+  //ptr +="<a class=\"button button-on\" href=\"/\">Reload</a>\n";
 
-  if(led0stat)
-  {ptr +="<p>LED0 Status: ON</p><a class=\"button button-off\" href=\"/led0off\">OFF</a>\n";}
+  //Inputs
+  ptr +="<h4> Optocoupler Inputs </h4>\n";
+  ptr +="<div class = \"placeside\">\n";
+  if(opt1stat)
+  {ptr +="<div class=\"rectangle rectangle-on\">OPT1 ON</div>\n";}
   else
-  {ptr +="<p>LED0 Status: OFF</p><a class=\"button button-on\" href=\"/led06on\">ON</a>\n";}
+  {ptr +="<div class=\"rectangle rectangle-off\">OPT1 OFF</div>\n";}
+
+  if(opt2stat)
+    {ptr +="<div class=\"rectangle rectangle-on\">OPT2 ON</div>\n";}
+  else
+  {ptr +="<div class=\"rectangle rectangle-off\">OPT2 OFF</div>\n";}
+
+  if(opt3stat)
+  {ptr +="<div class=\"rectangle rectangle-on\">OPT3 ON</div>\n";}
+  else
+  {ptr +="<div class=\"rectangle rectangle-off\">OPT3 OFF</div>\n";}
+
+  if(opt4stat)
+  {ptr +="<div class=\"rectangle rectangle-on\">OPT4 ON</div>\n";}
+  else
+  {ptr +="<div class=\"rectangle rectangle-off\">OPT4 OFF</div>\n";}
+
+  ptr +="</div>\n";
+
+  //Buttons
+  ptr +="<h4> Buttons Controls </h4>\n";
+  ptr +="<div class = \"placeside\">\n";
+  if(led0stat)
+  {ptr +="<p>LED0:</p><a class=\"button button-on\" href=\"/led0off\">ON</a>\n";}
+  else
+  {ptr +="<p>LED0:</p><a class=\"button button-off\" href=\"/led0on\">OFF</a>\n";}
 
   if(led1stat)
-  {ptr +="<p>LED1 Status: ON</p><a class=\"button button-off\" href=\"/led1off\">OFF</a>\n";}
+  {ptr +="<p>LED1:</p><a class=\"button button-on\" href=\"/led1off\">ON</a>\n";}
   else
-  {ptr +="<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/led1on\">ON</a>\n";}
-
+  {ptr +="<p>LED1:</p><a class=\"button button-off\" href=\"/led1on\">OFF</a>\n";}
+  ptr +="</div>\n";
+  ptr +="<div class = \"placeside\">\n";
   if(led2stat)
-  {ptr +="<p>LED2 Status: ON</p><a class=\"button button-off\" href=\"/led2off\">OFF</a>\n";}
+  {ptr +="<p>LED2:</p><a class=\"button button-on\" href=\"/led2off\">ON</a>\n";}
   else
-  {ptr +="<p>LED2 Status: OFF</p><a class=\"button button-on\" href=\"/led2on\">ON</a>\n";}
+  {ptr +="<p>LED2:</p><a class=\"button button-off\" href=\"/led2on\">OFF</a>\n";}
 
    if(led3stat)
-  {ptr +="<p>LED3 Status: ON</p><a class=\"button button-off\" href=\"/led3off\">OFF</a>\n";}
+  {ptr +="<p>LED3:</p><a class=\"button button-on\" href=\"/led3off\">ON</a>\n";}
   else
-  {ptr +="<p>LED3 Status: OFF</p><a class=\"button button-on\" href=\"/led3on\">ON</a>\n";}
-
+  {ptr +="<p>LED3:</p><a class=\"button button-off\" href=\"/led3on\">OFF</a>\n";}
+  ptr +="</div>\n";
+ 
   if(led4stat)
-  {ptr +="<p>LED4 Status: OFF <a class=\"button button-off\" href=\"/led4off\">ON</a></p>\n";}
+  {ptr +="<p>LED4:<a class=\"button button-off\" href=\"/led4off\">OFF</a></p>\n";}
   else
-  {ptr +="<p>LED4 Status: ON</p><a class=\"button button-on\" href=\"/led4on\">OFF</a>\n";}
-
-  if(led5stat)
-  {ptr +="<p>LED5 Status: ON</p><a class=\"button button-off\" href=\"/led5off\">OFF</a>\n";}
-  else
-  {ptr +="<p>LED5 Status: OFF</p><a class=\"button button-on\" href=\"/led5on\">ON</a>\n";}
-
-  if(led6stat)
-  {ptr +="<p>LED6 Status: ON</p><a class=\"button button-off\" href=\"/led6off\">OFF</a>\n";}
-  else
-  {ptr +="<p>LED6 Status: OFF</p><a class=\"button button-on\" href=\"/led6on\">ON</a>\n";}
-
-  if(led7stat)
-  {ptr +="<p>LED7 Status: ON</p><a class=\"button button-off\" href=\"/led7off\">OFF</a>\n";}
-  else
-  {ptr +="<p>LED7 Status: OFF</p><a class=\"button button-on\" href=\"/led7on\">ON</a>\n";}
-
-  if(led8stat)
-  {ptr +="<p>LED8 Status: ON</p><a class=\"button button-off\" href=\"/led8off\">OFF</a>\n";}
-  else
-  {ptr +="<p>LED8 Status: OFF</p><a class=\"button button-on\" href=\"/led8on\">ON</a>\n";}
+  {ptr +="<p>LED4:</p><a class=\"button button-on\" href=\"/led4on\">ON</a>\n";}
 
   
   ptr +="</body>\n";
