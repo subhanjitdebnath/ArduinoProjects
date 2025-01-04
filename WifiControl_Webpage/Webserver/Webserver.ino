@@ -74,6 +74,7 @@ void setup() {
   server.on("/led3off", handle_led3off);
   server.on("/led4on", handle_led4on);
   server.on("/led4off", handle_led4off);
+  server.on("/help",handle_help);
   server.onNotFound(handle_NotFound);
   
   server.begin();
@@ -115,6 +116,9 @@ void loop() {
 
 void handle_OnConnect() {
   server.send(200, "text/html", SendHTML(LED0status,LED1status,LED2status,LED3status,LED4status,OPT1status,OPT2status,OPT3status,OPT4status)); 
+}
+void handle_help() {
+  server.send(200, "text/html", SendHTML2()); 
 }
 
 void handle_led0on() {
@@ -243,6 +247,7 @@ String SendHTML(uint8_t led0stat,uint8_t led1stat,uint8_t led2stat,uint8_t led3s
   ptr +=".button-on {background-color: #1abc9c;}\n";
   ptr +=".button-on:active {background-color: #16a085;}\n";
   ptr +=".button-off {background-color: #34495e;}\n";
+  ptr +=".button-info {background-color: #87e3f1;}\n";
   ptr +=".button-off:active {background-color: #2c3e50;}\n";
   ptr +=".rectangle { width: 100px;height:50px;background-color: #00FF00;color: #FFFFFF ;display: flex; justify-content: center; align-items: center; font-size: 15px; border: 2px solid #040404;}\n";
   ptr +=".rectangle-on { background-color: #00FF00;}\n";
@@ -254,7 +259,6 @@ String SendHTML(uint8_t led0stat,uint8_t led1stat,uint8_t led2stat,uint8_t led3s
   ptr +="<body>\n";
   ptr +="<h1>LED CONTROL</h1>\n";
   ptr +="<h3>Designed by Subhanjit</h3>\n";
-  //ptr +="<a class=\"button button-on\" href=\"/\">Reload</a>\n";
 
   //Inputs
   ptr +="<h4> Optocoupler Inputs </h4>\n";
@@ -311,6 +315,42 @@ String SendHTML(uint8_t led0stat,uint8_t led1stat,uint8_t led2stat,uint8_t led3s
   else
   {ptr +="<p>LED4:</p><a class=\"button button-on\" href=\"/led4on\">ON</a>\n";}
 
+  ptr +="<a class=\"button button-info\" href=\"/help\">Help</a>\n";
+  ptr +="</body>\n";
+  ptr +="</html>\n";
+  return ptr;
+}
+
+String SendHTML2(){
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+  ptr +="<meta http-equiv=\"refresh\" content=\"2\">\n";
+  ptr +="<title>Operation Details</title>\n";
+  ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
+  ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
+  ptr +=".button {display: block;width: 50px;background-color: #1abc9c;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 15px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
+  ptr +=".button-on {background-color: #1abc9c;}\n";
+  ptr +=".button-on:active {background-color: #16a085;}\n";
+  ptr +=".button-off {background-color: #34495e;}\n";
+  ptr +=".button-off:active {background-color: #2c3e50;}\n";
+  ptr +=".rectangle { width: 100px;height:50px;background-color: #00FF00;color: #FFFFFF ;display: flex; justify-content: center; align-items: center; font-size: 15px; border: 2px solid #040404;}\n";
+  ptr +=".rectangle-on { background-color: #00FF00;}\n";
+  ptr +=".rectangle-off {  background-color: #adb0a6; }\n";
+  ptr +=".placeside {display:flex;}\n";
+  ptr +="p {font-size: 15px;color: #888;margin-bottom: 10px;}\n";
+  ptr +="</style>\n";
+  ptr +="</head>\n";
+  ptr +="<body>\n";
+  ptr +="<h1>Control Details</h1>\n";
+  ptr +="<h3>Buttons</h3>\n";
+  
+  ptr +="<p>If Button Shows OFF : It means that LED is Off</p>\n";
+  ptr +="<p>If Button Shows ON : It means that LED is ON</p>\n";
+
+  ptr +="<h3>Connections</h3>\n";
+  ptr +="<p>Check the Board . D0 to D4 are Outputs. Means controlled by Buttons. Connect LED to those pins.</p>\n";
+  ptr +="<p>Check the Board . D5 to D8 are Inputs.Connect Optocoupler inputs.</p>\n";
+  ptr +="<a class=\"button button-on\" href=\"/\">Back</a>\n";
   
   ptr +="</body>\n";
   ptr +="</html>\n";
